@@ -6,6 +6,9 @@ import ReactDOM from 'react-dom';
 import { Tasks } from '../api/tasks.js';
 
 import Task from './Task.jsx';
+import Best from './Best.jsx';
+
+import AccountsUIWrapper from './AccountsUIWrapper.jsx';
  
 // App component - represents the whole app
 class App extends Component {
@@ -16,14 +19,28 @@ class App extends Component {
     // Find the text field via the React ref
     const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
  
-    Tasks.insert({
-      text,
-      createdAt: new Date(), // current time
-    });
+   Meteor.call('tasks.insert', text);
  
     // Clear form
     ReactDOM.findDOMNode(this.refs.textInput).value = '';
   }
+
+
+   renderTopTask(){
+
+        let lista = this.props.tasks;
+        let arrayOrdenado = lista.sort(function (a, b) {
+            return b.cont-a.cont;
+        });
+
+        var top = arrayOrdenado.slice(0,1);
+
+        
+        return top.map((task)=>(
+            <Best key={task._id} task={task} />
+        ));
+
+    }
 
   renderTasks() {
     return this.props.tasks.map((task) => (
@@ -34,22 +51,32 @@ class App extends Component {
   render() {
     return (
       <div className="content">
+      <p className="titulos">Mejor chiste</p>
+                        <ul>
+                            {this.renderTopTask()}
+                        </ul>
 
-      <h4>¿Quieres publicar un chiste?</h4>
+
+
+         <h4>¿Quieres publicar un chiste?</h4>
+
+      <AccountsUIWrapper />
+      { this.props.currentUser ?
+            <form className="new-task" onSubmit={this.handleSubmit.bind(this)} >
+              <input
+                type="text"
+                ref="textInput"
+                placeholder="Escribe aquí tu chiste"
+              />
+            </form> : ''
+          }
+   
        
-
-        <form className="new-task" onSubmit={this.handleSubmit.bind(this)} >
-            <input
-              type="text"
-              ref="textInput"
-              placeholder="Escribe aquí tu chiste"
-            />
-          </form>
 
           <div class="post-preview">
             
               <h2 class="post-title">
-                Joke:
+                Todos los chistes:
               </h2>
               <h3 class="post-subtitle">
                 {this.renderTasks()}
@@ -57,20 +84,35 @@ class App extends Component {
             
             
           </div>
+
+           
+
+                       
  
         
       </div>
+
+       
+
+                       
+
+                        
     );
   }
 }
 
 App.propTypes = {
   tasks: PropTypes.array.isRequired,
+  incompleteCount: PropTypes.number.isRequired,
+  currentUser: PropTypes.object,
 };
  
 export default createContainer(() => {
+  Meteor.subscribe('tasks');
+  
   return {
-    tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),   
-
+    tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),
+    incompleteCount: Tasks.find({ checked: { $ne: true } }).count(),
+    currentUser: Meteor.user(),
   };
 }, App);
