@@ -26,6 +26,7 @@ export default class Task extends Component {
           &times;
         </button>
 
+      //Zona diferente: inicio
         <button
           class="vote-btn" 
           data-default-text="Vote This Dish Up!"
@@ -33,7 +34,7 @@ export default class Task extends Component {
     <span class="icon"></span> <span class="text">Vote This Dish Up!</span>
   </button>
  
-       
+       //Zona diferente: fin
  
         <span className="text">{this.props.task.text}</span>
       </li>
