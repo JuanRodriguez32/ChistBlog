@@ -1,3 +1,6 @@
+//Segun recuerdo no es posible o es recomendable no colocar ningun .js dentro de las carpetas de client y server.
+//Es recomendable hacerlo dentro de la carpeta imports.
+
 var VoteWidget= {
   settings: {
     $counter: $('.vote-count'),
