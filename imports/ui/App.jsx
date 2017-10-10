@@ -69,6 +69,7 @@ App.propTypes = {
 };
  
 export default createContainer(() => {
+ //No esta subscribe('tasks')
   return {
     tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),   
 
