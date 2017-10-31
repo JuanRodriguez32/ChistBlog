@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 import { Tasks } from '../api/tasks.js';
- 
+//Clase genérica ¿?
 // Task component - represents a single todo item
 export default class Task extends Component {
 
