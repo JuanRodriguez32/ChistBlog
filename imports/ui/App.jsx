@@ -1,3 +1,4 @@
+//No importa más clases de react ¿?
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
@@ -16,7 +17,7 @@ class App extends Component {
    handleSubmit(event) {
     event.preventDefault();
  
-    // Find the text field via the React ref
+    // Ojo con el tipo de variable que usa
     const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
  
    Meteor.call('tasks.insert', text);
@@ -101,6 +102,7 @@ class App extends Component {
   }
 }
 
+//Si no hay constructor, el proptypes no sirve.
 App.propTypes = {
   tasks: PropTypes.array.isRequired,
   incompleteCount: PropTypes.number.isRequired,
